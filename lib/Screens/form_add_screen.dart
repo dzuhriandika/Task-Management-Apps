@@ -16,18 +16,18 @@ class FormAddScreen extends StatefulWidget {
 class _FormAddScreenState extends State<FormAddScreen> {
   bool _isLoading = false;
   ApiService _apiService = ApiService();
-  bool _isFieldNameValid;
-  bool _isFieldEmailValid;
-  TextEditingController _controllerName = TextEditingController();
-  TextEditingController _controllerEmail = TextEditingController();
+  bool _isFieldTitleValid;
+  bool _isFieldDescriptionValid;
+  TextEditingController _controllerTitle = TextEditingController();
+  TextEditingController _controllerDescription = TextEditingController();
 
   @override
   void initState() {
     if (widget.task != null) {
-      _isFieldNameValid = true;
-      _controllerName.text = widget.task.title;
-      _isFieldEmailValid = true;
-      _controllerEmail.text = widget.task.description;
+      _isFieldTitleValid = true;
+      _controllerTitle.text = widget.task.title;
+      _isFieldDescriptionValid = true;
+      _controllerDescription.text = widget.task.description;
     }
     super.initState();
   }
@@ -50,8 +50,8 @@ class _FormAddScreenState extends State<FormAddScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                _buildTextFieldName(),
-                _buildTextFieldEmail(),
+                _buildTextFieldTitle(),
+                _buildTextFieldDescription(),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: RaisedButton(
@@ -64,10 +64,10 @@ class _FormAddScreenState extends State<FormAddScreen> {
                       ),
                     ),
                     onPressed: () {
-                      if (_isFieldNameValid == null ||
-                          _isFieldEmailValid == null ||
-                          !_isFieldNameValid ||
-                          !_isFieldEmailValid) {
+                      if (_isFieldTitleValid == null ||
+                          _isFieldDescriptionValid == null ||
+                          !_isFieldTitleValid ||
+                          !_isFieldDescriptionValid) {
                         _scaffoldState.currentState.showSnackBar(
                           SnackBar(
                             content: Text("Please fill all field"),
@@ -76,8 +76,8 @@ class _FormAddScreenState extends State<FormAddScreen> {
                         return;
                       }
                       setState(() => _isLoading = true);
-                      String title = _controllerName.text.toString();
-                      String description = _controllerEmail.text.toString();
+                      String title = _controllerTitle.text.toString();
+                      String description = _controllerDescription.text.toString();
                       Task task =
                           Task(title: title, description: description);
                       if (widget.task == null) {
@@ -132,39 +132,39 @@ class _FormAddScreenState extends State<FormAddScreen> {
     );
   }
 
-  Widget _buildTextFieldName() {
+  Widget _buildTextFieldTitle() {
     return TextField(
-      controller: _controllerName,
+      controller: _controllerTitle,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: "Full title",
-        errorText: _isFieldNameValid == null || _isFieldNameValid
+        errorText: _isFieldTitleValid == null || _isFieldTitleValid
             ? null
             : "Full title is required",
       ),
       onChanged: (value) {
         bool isFieldValid = value.trim().isNotEmpty;
-        if (isFieldValid != _isFieldNameValid) {
-          setState(() => _isFieldNameValid = isFieldValid);
+        if (isFieldValid != _isFieldTitleValid) {
+          setState(() => _isFieldTitleValid = isFieldValid);
         }
       },
     );
   }
 
-  Widget _buildTextFieldEmail() {
+  Widget _buildTextFieldDescription() {
     return TextField(
-      controller: _controllerEmail,
+      controller: _controllerDescription,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-        labelText: "Email",
-        errorText: _isFieldEmailValid == null || _isFieldEmailValid
+        labelText: "Description",
+        errorText: _isFieldDescriptionValid == null || _isFieldDescriptionValid
             ? null
-            : "Email is required",
+            : "Description is required",
       ),
       onChanged: (value) {
         bool isFieldValid = value.trim().isNotEmpty;
-        if (isFieldValid != _isFieldEmailValid) {
-          setState(() => _isFieldEmailValid = isFieldValid);
+        if (isFieldValid != _isFieldDescriptionValid) {
+          setState(() => _isFieldDescriptionValid = isFieldValid);
         }
       },
     );
